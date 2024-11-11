@@ -1,0 +1,17 @@
+$error-color: theme('colors.red.700');
+$warn-color: theme('colors.orange.600');
+$success-color: theme('colors.green.700');
+
+.password-strength {
+  &-error {
+    --mdc-linear-progress-active-indicator-color: #{$error-color};
+  }
+
+  &-warn {
+    --mdc-linear-progress-active-indicator-color: #{$warn-color};
+  }
+
+  &-success {
+    --mdc-linear-progress-active-indicator-color: #{$success-color};
+  }
+}

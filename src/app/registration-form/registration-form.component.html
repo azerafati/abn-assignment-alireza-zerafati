@@ -1,0 +1,70 @@
+<section class="mat-elevation-z6 rounded bg-white p-3 sm:p-6">
+  <div class="w-100 relative my-2 h-16 sm:my-6">
+    <img class="object-contain" ngSrc="/ABN-AMRO_Logo.png" alt="" fill priority />
+  </div>
+  <h2 class="mb-3">Registration Form</h2>
+  <form class="mb-6 grid gap-4 xs:grid-cols-2" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field class="example-full-width">
+      <mat-label>Username</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="username"
+        placeholder="Ex. John123"
+        autocomplete="username"
+        data-testid="username"
+      />
+      @if (form.controls.username.hasError('required')) {
+        <mat-error>Username is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput formControlName="email" placeholder="Ex. pat@abn-amro.com" data-testid="email" />
+      @if (form.controls.email.hasError('email')) {
+        <mat-error>Please enter a valid email address</mat-error>
+      }
+      @if (form.controls.email.hasError('required')) {
+        <mat-error>Email is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input
+        [type]="hidePassword ? 'password' : 'text'"
+        matInput
+        placeholder=""
+        formControlName="password"
+        required
+        autocomplete="new-password"
+        data-testid="password"
+      />
+      <button (click)="hidePassword = !hidePassword" mat-icon-button matSuffix type="button">
+        <mat-icon [fontIcon]="hidePassword ? 'visibility_off' : 'visibility'" />
+      </button>
+      <mat-progress-bar
+        [class]="'password-strength-' + (passwordColor$ | async)"
+        [value]="passwordStrength$ | async"
+        mode="determinate"
+      />
+      @if (form.controls.password.hasError('required')) {
+        <mat-error>Password is <strong>required</strong></mat-error>
+      }
+      @if (form.controls.password.hasError('weak') && !form.controls.password.hasError('required')) {
+        <mat-error>Password is <strong>weak</strong></mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label>Full Name</mat-label>
+      <input type="text" matInput formControlName="fullName" placeholder="Ex. John Smith" data-testid="fullName" />
+      <mat-hint>Optional</mat-hint>
+    </mat-form-field>
+    <div>
+      <button mat-flat-button type="submit" data-testid="submit">Register</button>
+    </div>
+  </form>
+  @if (isSubmitting) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+</section>

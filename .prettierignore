@@ -1,0 +1,13 @@
+# Add files here to ignore them from prettier formatting
+
+/dist
+/coverage
+/apps/**/chart/
+.angular/
+tmp/
+.cache/
+/apps/**/playwright-report/
+/.nx/cache/apps/ysis-financial-wlz-e2e/auth.json
+/apps/ysis-financial-wlz-e2e/auth.json
+
+.angular
