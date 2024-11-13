@@ -15,7 +15,7 @@ import { AsyncPipe, NgOptimizedImage } from '@angular/common'
 import { MatIconModule } from '@angular/material/icon'
 import { MatButtonModule, MatIconButton } from '@angular/material/button'
 import { MatProgressBar } from '@angular/material/progress-bar'
-import { finalize, map } from 'rxjs'
+import { finalize, map, Subscription } from 'rxjs'
 import { RegistrationService } from '../service/registration.service'
 
 @Component({
@@ -49,6 +49,7 @@ export class RegistrationFormComponent implements OnDestroy {
   })
   passwordStrength$ = this.form.controls.password.valueChanges.pipe(map(this.getPasswordStrength))
   protected isSubmitting = false
+  private subscription?: Subscription
   private readonly Error_Threshold = 30
   private readonly Warn_Threshold = 50
   protected passwordColor$ = this.passwordStrength$.pipe(
@@ -64,7 +65,7 @@ export class RegistrationFormComponent implements OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.snackBar.open('Goodbye!', 'Close')
+    this.subscription?.unsubscribe()
   }
 
   protected submit(): void {
@@ -74,7 +75,7 @@ export class RegistrationFormComponent implements OnDestroy {
     }
     if (this.isSubmitting) return
     this.isSubmitting = true
-    this.registrationService
+    this.subscription = this.registrationService
       .registerUser(this.form.getRawValue())
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({

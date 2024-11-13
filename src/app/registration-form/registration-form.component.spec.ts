@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { RegistrationFormComponent } from './registration-form.component'
 import { RegistrationService } from '../service/registration.service'
-import { delay, EMPTY, of, throwError } from 'rxjs'
+import { delay, EMPTY, of, Subscription, throwError } from 'rxjs'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { By } from '@angular/platform-browser'
 import { MatSnackBar } from '@angular/material/snack-bar'
@@ -175,5 +175,25 @@ describe('RegistrationFormComponent', () => {
 
     //then
     expect(registrationService.registerUser).toHaveBeenCalledTimes(2)
+  })
+
+  it('should unsubscribe on destroy', () => {
+    //given
+    jest.spyOn(registrationService, 'registerUser').mockReturnValue(
+      of({
+        status: 'success',
+        message: 'Registration successful',
+      }).pipe(delay(5000)),
+    )
+    component['form'].patchValue(VALID_FORM_DATA)
+
+    //when
+    submitForm()
+    const subscription = component['subscription']!
+    jest.spyOn(subscription, 'unsubscribe')
+    fixture.destroy()
+
+    //then
+    expect(subscription.unsubscribe).toHaveBeenCalled()
   })
 })
